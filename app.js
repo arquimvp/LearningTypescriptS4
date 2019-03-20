@@ -1,33 +1,38 @@
 "use strict";
-//3- Decoradores anidados
+//Decoradores en los metodos:
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-function avisaConTiempo(constructor) {
-    constructor.prototype.avisa = function () {
-        console.log('esta funcion la adquiri mientras definia la clase!! ;)');
-    };
-}
-function avisaConEnSegundoTiempo(constructor) {
-    constructor.prototype.avisaSegundaVez = function () {
-        console.log('esta funcion la adquiri despues de la anterior jaja!! ;)');
-        console.log(this);
-    };
-}
-var CualquierClase = /** @class */ (function () {
-    function CualquierClase(miNombre) {
-        this.miNombre = miNombre;
+var Villano = /** @class */ (function () {
+    function Villano(nombre) {
+        this.nombre = nombre;
     }
-    CualquierClase = __decorate([
-        avisaConEnSegundoTiempo,
-        avisaConTiempo
-    ], CualquierClase);
-    return CualquierClase;
+    Villano.prototype.plan = function () {
+        console.log('matar a superman');
+    };
+    __decorate([
+        editable(false)
+    ], Villano.prototype, "plan", null);
+    return Villano;
 }());
-var avisador = new CualquierClase('mi nombre avisador');
-avisador.avisa();
-avisador.avisaSegundaVez();
+var batman = new Villano('Bruce');
+batman.plan();
+//Supongamos que voy a sobreescribir el metodo:
+batman.plan = function () {
+    console.log('hacer las pases con superman');
+};
+//Aqui mando a llamar mi nuevo metodo:
+batman.plan();
+//Ahora voy a crear mi decorador para mi metodo, este decorador impedira que sobreescriban mi metodo.
+function editable(isEditable) {
+    return function (target, nombreProp, descriptor) {
+        if (!isEditable) {
+            //console.warn('no cambiare de opinion');
+        }
+        descriptor.writable = isEditable;
+    };
+}
 //# sourceMappingURL=app.js.map

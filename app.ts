@@ -1,32 +1,41 @@
+//Decoradores en los metodos:
 
-//3- Decoradores anidados
+class Villano {
+  constructor(public nombre:string){
 
-function avisaConTiempo(constructor:Function){
-  constructor.prototype.avisa = function(){
-    console.log('esta funcion la adquiri mientras definia la clase!! ;)');
+  }
+
+  @editable(false)
+  plan(){
+    console.log('matar a superman');
   }
 }
 
 
+let batman = new Villano('Bruce');
 
-function avisaConEnSegundoTiempo(constructor:Function){
-  constructor.prototype.avisaSegundaVez = function(){
-    console.log('esta funcion la adquiri despues de la anterior jaja!! ;)');
-    console.log(this);
-  }
+batman.plan();
+
+//Supongamos que voy a sobreescribir el metodo:
+batman.plan = function(){
+  console.log('hacer las pases con superman');
 }
 
+//Aqui mando a llamar mi nuevo metodo:
+batman.plan();
 
-@avisaConEnSegundoTiempo
-@avisaConTiempo
-class CualquierClase {
-  constructor(public miNombre:string){
 
+
+//Ahora voy a crear mi decorador para mi metodo, este decorador impedira que sobreescriban mi metodo.
+
+function editable (isEditable:boolean){
+  
+  //La siguiente linea es sintaxis para definir el decorador de metodos:
+  return function(target:any, nombreProp:string, descriptor:PropertyDescriptor){
+
+    if(!isEditable){
+      console.warn('no cambiare de opinion');
+    }
+    descriptor.writable = isEditable;
   }
 }
-
-let avisador : CualquierClase | any = new CualquierClase('mi nombre avisador');
-avisador.avisa();
-avisador.avisaSegundaVez();
-
-
