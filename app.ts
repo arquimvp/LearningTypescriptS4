@@ -1,41 +1,36 @@
-/**
- * Genericos:
- * 
- * Los genericos son aserciones que permiten trabajar con cualquier tipo de dato.
- */
 
 //Funciones genericas:
 
-function retornar (argumento:any){
-
-  return argumento;
-
+function fGeneric<T>(arg:T){
+  return arg;
 }
 
-//Yo puedo enviar cualquier tipo de dato:
 
-//en el siguiente ejemplo yo puedo aplicar un metodo toFixed para acotar los decimales. Esto lo se porque estoy seguro que es un numero.
-console.log(retornar(3.14165768).toFixed(2)); //3.14
-
-//en la siguiente linea no permite el toFixed, si lo ejecutas mandara un error.
-console.log(retornar('Alberto Martinez').toFixed(2)); //error en tiempo de ejecucion
-
-
-//El mismo error sucede aqui:
-console.log(retornar(new Date).toFixed(2)); //error en tiempo de ejecucion
-
-
-//Para poder solventar los anteriores errores en tiempo de ejecucion, podemos utilizar los genericos:
-
-// USO DE GENERICOS: La letra T es una convencion, se indica asi en la documentacion de typescript.
-
-function devolver<T>(argumento:T){
-  return argumento;
+type auto = {
+  marca: string;
+  motor: string;
 }
 
-console.log(devolver(3.14165768).toFixed(2)); //3.14
-console.log(devolver('Alberto Martinez').charAt(2)); //intenta poner otros metodos de strings
-console.log(devolver(new Date).getMonth());//intenta poner otros metodos de fechas
+type camioneta = {
+  marca: string;
+  traccion: string;
+}
 
-//Nosotros pudimos haber manejado los metodos correspondientes para tipo de dato, sin embargo es bueno que 
-//typescript lo maneje por nosotros para evitar equivocarnos.
+
+//El siguiente objeto puede ser de ambos tipos anteriores
+let maverik = {
+  marca: 'chevrolet',
+  motor: '4 cil',
+  traccion: 'trasera'
+}
+
+
+console.log(fGeneric(maverik));
+
+//Typescript nos permite acceder a las propiedades del tipo auto
+console.log(fGeneric<auto>(maverik).marca);
+console.log(fGeneric<auto>(maverik).motor);
+
+//Typescript nos permite acceder a las propiedades del tipo camioneta
+console.log(fGeneric<camioneta>(maverik).marca);
+console.log(fGeneric<camioneta>(maverik).traccion);
